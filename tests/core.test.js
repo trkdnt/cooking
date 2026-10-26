@@ -52,3 +52,11 @@ test('A gyorsítótár és a forráshivatkozás csak ellenőrzött formátumot f
  assert(validCachedSource(cache,cache.page));assert(!validCachedSource({...cache,revid:'javascript:alert(1)'},cache.page));assert(!validCachedSource(cache,'Másik recept'));
  assert(wikiURL('Szakácskönyv/Recept').startsWith('https://hu.wikibooks.org/wiki/'));
 });
+
+test('A cukkinihez tartozik recept, és az olívaolaj csak egyirányúan helyettesít',()=>{
+ assert(findIngredients('cukkini').some(i=>i.id==='cukkini'));
+ const r=recipes.find(r=>r.id==='cukkinis-teszta');assert(r);
+ const m=matchRecipe(r,new Set(['cukkini','olivaolaj']));
+ assert.equal(m.have,2);assert(!m.missing.includes('olaj'));
+ assert.equal(matchRecipe({ingredients:[{id:'olivaolaj'}]},new Set(['olaj'])).have,0);
+});

@@ -4,8 +4,8 @@ Magyar nyelvű, ingyenesen futtatható receptajánló GitHub Pages-re. Nincs reg
 
 ## Mit tud az MVP?
 
-- 31 választható alapanyag, ékezet nélküli keresés és gyakori elnevezések (pl. krumpli → burgonya).
-- 8 magyar, forrással ellátott, részletes recept; minden szükséges hozzávaló beleszámít az egyezésbe.
+- 124 választható alapanyag, ékezet nélküli keresés és gyakori elnevezések (pl. krumpli → burgonya).
+- 9 magyar, forrással ellátott, részletes recept; minden szükséges hozzávaló beleszámít az egyezésbe.
 - Egyezési százalék, tételes hiányzólista, másolható bevásárlólista.
 - Idő- és étrendszűrő, „minden megvan” szűrő, három rendezési mód.
 - Kedvencek és otthoni alapanyagok mentése a böngészőben.

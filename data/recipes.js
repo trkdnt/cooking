@@ -74,5 +74,14 @@ export const recipes = [
     ingredients: [i('keszpalacsinta','8 db sós, kész'),i('keszlecso','8 dl húsmentes, kész'),i('tojas','6 db'),i('hagyma','2 fej'),i('tejfol','4 dl'),i('olaj','2 ek'),i('cukor','ízlés szerint'),i('pirospaprika','ízlés szerint'),i('so','ízlés szerint'),i('bors','ízlés szerint')],
     steps: ['Az egyik hagymát aprítsd finomra, párold meg egy evőkanál olajon, és szórd meg pirospaprikával. Add hozzá a kész lecsót, sózd, párold össze.', 'Keverd hozzá a tejföl felét és a tojásokat; ízlés szerint kevés cukorral ízesítsd. Melegítsd forráspontig, majd töltsd meg vele a sós palacsintákat, és göngyöld fel őket.', 'A másik hagymát aprítsd fel, és párold meg a maradék olajon. Sóval, borssal, pirospaprikával ízesítsd, majd a maradék tejföllel főzd 4–5 percig.', 'A palacsintákat fektesd tűzálló tálba, öntsd le a mártással, és sütőben melegítsd át, pirítás nélkül.'],
     note: 'A húsmentes lecsó és az előre megsütött sós palacsinta külön, kész alapanyagként szerepel. Ezek elkészítési ideje nincs benne a becslésben. A forrás elkészítésében szereplő borsot a listához adtuk.'
+  },
+  {
+    id: 'cukkinis-teszta', title: 'Cukkinis-paradicsomos tészta', emoji: '🍝', color: 'mint', category: 'Zöldségek főszerepben',
+    description: 'Pirult cukkini, fokhagymás paradicsomszósz és egy leheletnyi fahéj.',
+    minutes: 30, servings: '2 (becsült)', vegetarian: false, vegan: false, dairyFree: false,
+    page: base + 'Növények/Cukkini/Cukkinis paradicsomos tészta',
+    ingredients: [i('cukkini','1 közepes'),i('paradicsomkonzerv','1 konzerv hámozott'),i('fokhagyma','2 gerezd'),i('olaj','a pirításhoz'),i('so','ízlés szerint'),i('bors','ízlés szerint'),i('fahej','1 késhegynyi'),i('teszta','ízlés szerinti mennyiség'),i('parmezan','kevés forgács a tetejére')],
+    steps: ['A cukkinit tisztítsd meg, hosszában vágd félbe, majd szeleteld fel. A paradicsomkonzerv darabjait aprítsd kisebbre.', 'Kevés olajon pirítsd meg a cukkinit. Keverd hozzá a zúzott fokhagymát, és rövid ideig pirítsd együtt.', 'Öntsd rá a paradicsomot a levével együtt. Sóval, borssal és egy késhegynyi fahéjjal ízesítsd, majd főzd sűrűre a szószt.', 'Közben a tésztát a csomagolásán szereplő útmutatás szerint főzd ki. A cukkinis szósszal és kevés parmezánforgáccsal tálald.'],
+    note: 'A forrás leírásában szereplő tésztát, fahéjat és parmezánt a hozzávalólistához adtuk; a forrás ezek mennyiségét nem adja meg. Az állati oltóval készült parmezán miatt ezt a változatot nem jelöljük vegetáriánusnak.'
   }
 ];

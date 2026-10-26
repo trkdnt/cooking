@@ -15,4 +15,6 @@ A szerkesztés dátuma: 2026. október 26. Egységesített alapanyagnevek, tagol
 | Habkönnyű palacsinta | [Móra Ferencné: Palacsinta](https://hu.wikibooks.org/wiki/Móra_Ferencné/Tészták/Zsírban_sült_tészták/Palacsinta) |
 | Lecsós palacsinta | [Lecsós palacsinta](https://hu.wikibooks.org/wiki/Szakácskönyv/Növények/Lecsó/Lecsós_palacsinta) |
 
+| Cukkinis-paradicsomos tészta | [Cukkinis paradicsomos tészta](https://hu.wikibooks.org/wiki/Szakácskönyv/Növények/Cukkini/Cukkinis_paradicsomos_tészta) |
+
 A hero tányérrajz és a favicon saját SVG, külső képfájl átvétele nélkül. A kártyákon az eszköz beépített emoji-betűkészlete jeleníti meg az ételjelöléseket.

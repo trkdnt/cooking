@@ -29,7 +29,7 @@ Megnyitás: http://127.0.0.1:4173 . A JavaScript-modulokhoz HTTP-kiszolgálás s
 npm run build
 ```
 
-A közzétehető állományok a `dist/` mappába kerülnek. A relatív hivatkozások miatt a `/cooking/` alkönyvtárban is működnek.
+A közzétehető állományok a `dist/` mappába kerülnek. A relatív hivatkozások miatt a `/cooking/` alkönyvtárban is működnek. A build a CSS- és JavaScript-fájloknak a tartalmuk alapján verziózott nevet ad, és a modulok hivatkozásait is átírja. Így a böngésző gyorsítótárából nem keverednek régi stílusok vagy modulok az új HTML-be.
 
 ## GitHub Pages
 

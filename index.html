@@ -1,51 +1,40 @@
 <!doctype html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Válaszd ki az otthoni alapanyagokat, és találj hozzájuk magyar recepteket. Kevesebb pazarlás, több jó falat.">
-  <meta name="theme-color" content="#254e3c">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://hu.wikibooks.org; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css">
-  <title>Mit főzzek ma? · A konyhádból kiindulva</title>
+ <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="description" content="Tartsd számon, milyen alapanyagaid vannak otthon. Mentsd a listát, és másold ki egy receptkereső kérdéssel együtt.">
+ <meta name="theme-color" content="#28543e">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+ <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css">
+ <title>Mi van otthon? · Saját konyhalistám</title>
 </head>
 <body>
-  <a class="skip" href="#recipes">Ugrás a receptekhez</a>
-  <header class="header wrap">
-    <a class="brand" href="./" aria-label="Mit főzzek ma? Kezdőlap"><span class="brand-icon" aria-hidden="true">♧</span> Mit főzzek ma<span class="orange">?</span></a>
-    <nav aria-label="Főmenü"><button class="nav-button active" id="browse-tab" aria-pressed="true">Receptötletek</button><button class="nav-button" id="favorites-tab" aria-pressed="false">♡ Kedvenceim <span id="favorite-count">0</span></button></nav>
-    <span class="header-note">A konyhádból kiindulva.</span>
-  </header>
-  <main class="wrap">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy"><span class="eyebrow"><span class="dot"></span> KEVESEBB PAZARLÁS, TÖBB JÓ FALAT</span><h1 id="hero-title">Nézz a hűtőbe.<br>Mi adunk egy <em>ötletet.</em></h1><p>Jelöld be, mi van otthon, és találd meg a következő kedvenc fogásodat. Egy finom vacsora közelebb van, mint gondolnád.</p><a class="hero-link" href="#pantry">Nézzük, mi van a konyhában <span aria-hidden="true">↘</span></a></div>
-      <div class="hero-art"><img src="./assets/plate.svg" alt="Színes zöldségekkel és gombával teli, felülnézetből rajzolt tányér" width="540" height="370"><span class="art-note">Jó étel. Abból, ami van.</span><span class="art-tag">egy csipet kreativitás ✧</span></div>
-    </section>
-    <div class="workspace">
-      <aside class="pantry" id="pantry" aria-labelledby="pantry-title">
-        <div class="section-kicker">01 / A TE KONYHÁD</div><div class="panel-heading"><h2 id="pantry-title">Mi van otthon?</h2><span class="count" id="pantry-count">0</span></div><p class="muted small">Kattints az alapanyagokra. A többit ránk bízhatod.</p>
-        <label class="search-field"><span aria-hidden="true">⌕</span><input id="ingredient-search" type="search" placeholder="Alapanyag keresése…" aria-label="Alapanyag keresése" autocomplete="off"></label>
-        <div id="selected-area" hidden><div class="selected-heading"><span>KIVÁLASZTVA</span><button class="text-button" id="clear-pantry">Mind törlése</button></div><div class="chips selected-chips" id="selected-ingredients"></div></div>
-        <div class="ingredient-groups" id="ingredient-groups"></div>
-        <div class="basics"><span aria-hidden="true">✧</span><div><strong>Az apróságok is számítanak</strong><p>A sót, borsot és olajat is jelöld, ha van otthon.</p><button class="text-button" id="add-basics">Ezek vannak nálam +</button></div></div>
-        <div class="privacy-note">⌂ A választásaid ezen az eszközön maradnak.</div>
-      </aside>
-      <section class="recipes" id="recipes" aria-labelledby="recipes-title">
-        <div class="results-heading"><div><div class="section-kicker">02 / EBBŐL FŐZHETSZ</div><h2 id="recipes-title">Egy kis inspiráció</h2><p class="muted small" id="results-summary" role="status"></p></div><label class="sort-label">Rendezés<select id="sort"><option value="match">Legjobb egyezés</option><option value="time">Leggyorsabb elöl</option><option value="missing">Legkevesebb hiányzó</option></select></label></div>
-        <div class="filters" aria-label="Receptek szűrése"><label><span>Elkészítési idő</span><select id="time-filter"><option value="0">Bármennyi idő</option><option value="30">Legfeljebb 30 perc</option><option value="45">Legfeljebb 45 perc</option><option value="60">Legfeljebb 60 perc</option></select></label><label><span>Étrend</span><select id="diet-filter"><option value="all">Minden fogás</option><option value="vegetarian">Vegetáriánus</option><option value="vegan">Vegán</option><option value="dairyFree">Tej nélkül készül</option></select></label><label class="checkbox-filter"><input type="checkbox" id="complete-filter"><span>Csak amihez minden megvan</span></label></div>
-        <div class="result-grid" id="result-grid"></div>
-        <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">🥣</span><h3 id="empty-title">Most nincs ilyen találat.</h3><p id="empty-description">Próbálj más szűrőket vagy adj hozzá alapanyagokat.</p><button class="button secondary" id="reset-filters">Szűrők törlése</button></div>
-        <div class="collection-note"><span aria-hidden="true">↗</span><p><strong>Kis gyűjtemény, valódi források.</strong> Az első kiadás 9 magyar recepttel indul. Az alapanyaglista ennél bővebb; nem minden alapanyaghoz tartozik még recept. Minden receptnél megtalálod az eredetit, és közvetlenül betöltheted az aktuális online leírást.</p></div>
-      </section>
-    </div>
-    <section class="how"><div><span>01</span><h3>Nézz körül otthon</h3><p>Egy hagyma, pár tojás? Jó kezdet.</p></div><div><span>02</span><h3>Találj egy jó ötletet</h3><p>Látod, mi van meg és mi hiányzik.</p></div><div><span>03</span><h3>Főzz valami finomat</h3><p>A recept végigvezet a lépéseken.</p></div></section>
-  </main>
-  <footer class="wrap footer"><span class="footer-brand">Mit főzzek ma?</span><p>Az egyszerű hétköznapok konyhája. <span>Ingyenes MVP · 9 recept</span></p><button class="text-button" id="about-button">Források és adatkezelés ↗</button></footer>
-  <dialog id="recipe-dialog" aria-labelledby="dialog-title"><button class="close-button" id="close-dialog" aria-label="Recept bezárása">×</button><div id="recipe-content"></div></dialog>
-  <dialog id="about-dialog" aria-labelledby="about-title"><button class="close-button" id="close-about" aria-label="Tájékoztató bezárása">×</button><div class="dialog-body"><div class="section-kicker">JÓ TUDNI</div><h2 id="about-title">Egy átlátható kis konyha.</h2><p>A receptek a magyar Wikikönyvek szakácskönyvéből származó, szerkesztett változatok. A hozzávalókat egységesítettük, a lépéseket tagoltuk. A becsült idők és adagok szerkesztői kiegészítések. A részleteknél az eredeti és a szerzők laptörténete is elérhető.</p><p>A receptszövegek licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.hu" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. A feltüntetett étrend a felsorolt változatra vonatkozik; a csomagolt termékek összetételét ellenőrizd.</p><p>Nincs regisztráció, analitika vagy saját szerver. Az alapanyagokat és kedvenceket csak a böngésződ tárolja. Az „Online leírás betöltése” gomb a Wikikönyvek nyilvános API-ját hívja meg; ekkor a szolgáltató látja a szokásos hálózati adatokat. Az alapanyaglistádat nem küldjük el.</p><button class="button secondary" id="clear-data">Az eszközön mentett adataim törlése</button><p class="muted small" id="storage-status" role="status"></p></div></dialog>
-  <div class="toast" id="toast" role="status" hidden></div>
-  <noscript><p class="wrap">Az alkalmazáshoz engedélyezd a JavaScriptet a böngésződben.</p></noscript>
-  <script type="module" src="./app.js"></script>
-</body>
-</html>
+ <a class="skip" href="#catalog">Ugrás az alapanyagokhoz</a>
+ <header class="wrap header"><a class="brand" href="./"><span aria-hidden="true">♧</span> Mi van otthon<span class="accent">?</span></a><span class="save-status" id="save-status" role="status">Mentés ezen az eszközön</span></header>
+ <main class="wrap">
+  <section class="intro"><div><span class="eyebrow">A SAJÁT KIS KAMRÁD</span><h1>A konyhád,<br><em>egy helyen.</em></h1><p>Jelöld be, mi van otthon. Másold ki a listád, és illeszd be a beszélgetésbe, amikor receptötletre van szükséged.</p><a class="intro-link" href="#catalog">Alapanyagok kiválasztása ↓</a></div><img src="./assets/plate.svg" alt="Zöldségekkel teli tányér rajza" width="380" height="260"></section>
+  <div class="workspace">
+   <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+    <div class="section-top"><div><span class="eyebrow">01 / NÉZZ KÖRÜL A KONYHÁBAN</span><h2 id="catalog-title">Alapanyagok</h2></div><span class="catalog-count" id="catalog-count"></span></div>
+    <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Keress, például: cukkini…" aria-label="Alapanyag keresése" autocomplete="off"></label><label class="category"><span class="sr-only">Kategória</span><select id="category"><option value="all">Minden kategória</option></select></label></div>
+    <p class="result-count" id="result-count" role="status"></p>
+    <div id="groups"></div>
+    <p class="empty-search" id="empty-search" hidden>Nincs ilyen alapanyag a listában. Add hozzá lent sajátként.</p>
+    <form class="custom-form" id="custom-form"><label for="custom-name"><strong>Valami más is van otthon?</strong><span>Amit nem találsz, hozzáadhatod a saját alapanyagaidhoz.</span></label><div><input id="custom-name" maxlength="60" placeholder="Például: vörös pesto" required autocomplete="off"><button class="button secondary" type="submit">Hozzáadom +</button></div></form>
+   </section>
+   <aside class="inventory" aria-labelledby="inventory-title">
+    <div class="inventory-heading"><div><span class="eyebrow">02 / EZ VAN NÁLAD</span><h2 id="inventory-title">Otthoni készleted</h2></div><span class="badge" id="selected-count">0</span></div>
+    <p class="muted small">Ha elfogyott valami, vedd ki a listából. A mennyiséget is megadhatod, ha szeretnéd.</p>
+    <div class="empty-inventory" id="empty-inventory"><span aria-hidden="true">🥣</span><h3>Kezdjük azzal, ami van.</h3><p>Válassz alapanyagokat a listából,<br>vagy adj hozzá sajátot.</p></div>
+    <ul class="inventory-list" id="inventory-list"></ul>
+    <button class="text-button clear-button" id="clear-list" hidden>Lista kiürítése</button>
+    <div class="export"><label for="notes">Mire figyeljen a receptkeresés?<span>Nem kötelező</span></label><textarea id="notes" maxlength="1000" rows="2" placeholder="Például: 2 főre, legfeljebb 30 perc, sütő nélkül"></textarea><button class="button primary" id="copy-prompt" disabled>Másolás receptkérésként <span aria-hidden="true">↗</span></button><button class="button copy-list" id="copy-list" disabled>Csak az alapanyaglista másolása</button><p class="copy-hint">Másolás után illeszd be ide a beszélgetésbe.<br>Az oldal a bejelölt alapanyagokból állítja össze a szöveget.</p><details class="prompt-preview"><summary>A receptkérés előnézete</summary><pre id="prompt-preview">Először válassz legalább egy alapanyagot.</pre></details></div>
+   </aside>
+  </div>
+ </main>
+ <footer class="wrap footer"><span>Kevesebb fejben tartás. Több jó falat.</span><p>A listád ebben a böngészőben tárolódik. Másik eszközre nem szinkronizálódik.</p></footer>
+ <div class="toast" id="toast" role="status" hidden><span id="toast-message"></span><button id="undo" hidden>Visszavonás</button></div>
+ <dialog id="copy-dialog" aria-labelledby="copy-title"><button class="close" id="close-copy" aria-label="Másolási ablak bezárása">×</button><h2 id="copy-title">Másold ki innen</h2><p>A böngésző nem engedte az automatikus másolást. A szöveget kijelöltük; másold ki a szokásos módon.</p><textarea id="manual-copy" readonly aria-label="Kimásolható szöveg" rows="12"></textarea></dialog>
+ <noscript><p class="wrap">Az alapanyaglista használatához engedélyezd a JavaScriptet.</p></noscript>
+ <script type="module" src="./app.js"></script>
+</body></html>

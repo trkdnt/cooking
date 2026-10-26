@@ -1,62 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {recipes} from '../data/recipes.js';
-import {ingredientMap,findIngredients,matchRecipe,selectRecipes,readSaved,saveState,extractOnlineText,validCachedSource,wikiURL} from '../core.js';
-const filters={favorites:false,minutes:0,diet:'all',complete:false,sort:'match'};
-test('Minden recept teljes, egyedi és csak ismert alapanyagot kér',()=>{
- assert.equal(new Set(recipes.map(r=>r.id)).size,recipes.length);
- for(const r of recipes){assert(r.steps.length>=3);assert(r.ingredients.length>=5);assert(r.page);assert(r.minutes>0);for(const i of r.ingredients)assert(ingredientMap.has(i.id),i.id);assert.equal(new Set(r.ingredients.map(i=>i.id)).size,r.ingredients.length);}
-});
-test('Az egyezés minden hozzávalót számol, rejtett kamra-alapok nélkül',()=>{
- const r=recipes.find(r=>r.id==='gombapaprikas');
- assert.equal(matchRecipe(r,new Set()).percent,0);
- const all=new Set(r.ingredients.map(i=>i.id));assert.equal(matchRecipe(r,all).percent,100);
- all.delete('so');assert.equal(matchRecipe(r,all).percent,88);assert.deepEqual(matchRecipe(r,all).missing,['so']);
-});
-test('A rendezés, az idő, az étrend és a kedvencek együtt szűrnek',()=>{
- const ids=new Set(recipes.flatMap(r=>r.ingredients.map(i=>i.id)));
- const selected=selectRecipes(recipes,ids,{...filters,minutes:30,diet:'vegetarian',favorites:true,complete:true},new Set(['gombapaprikas','rakott-krumpli']));
- assert.deepEqual(selected.map(r=>r.id),['gombapaprikas']);
- assert.equal(selectRecipes(recipes,new Set(),{...filters,complete:true},new Set()).length,0);
- assert(selectRecipes(recipes,new Set(),{...filters,diet:'vegan'},new Set()).every(r=>r.vegan));
-});
-test('Az ékezet nélküli keresés és a gyakori alapanyag-nevek működnek',()=>{
- assert(findIngredients('krumpli').some(i=>i.id==='krumpli'));
- assert(findIngredients('tejfol').some(i=>i.id==='tejfol'));
- assert(findIngredients('hagyma').some(i=>i.id==='hagyma'));
- assert.equal(findIngredients('nincsilyen').length,0);
-});
-test('A hibás, régi és tiltott tárhely nem akadályozza az indulást',()=>{
- const known=new Set(recipes.map(r=>r.id));
- const storage={getItem:()=>JSON.stringify({pantry:['so','unknown'],favorites:['gombapaprikas','unknown']})};
- assert.deepEqual([...readSaved(storage,known).pantry],['so']);
- assert.deepEqual([...readSaved(storage,known).favorites],['gombapaprikas']);
- assert.equal(readSaved({getItem:()=>'{broken'},known).pantry.size,0);
- assert.equal(readSaved({getItem:()=>null},known).available,true);
- assert.equal(readSaved({getItem:()=> 'null'},known).pantry.size,0);
- assert.equal(readSaved(null,known).available,false);
- assert.equal(saveState({setItem(){throw Error('quota');}},new Set(),new Set()),false);
-});
-test('A mentési formátum visszaállítható',()=>{
- let saved;const storage={setItem:(key,value)=>saved=value,getItem:()=>saved};
- assert(saveState(storage,new Set(['so']),new Set(['gombapaprikas'])));
- assert.equal(readSaved(storage,new Set(['gombapaprikas'])).favorites.has('gombapaprikas'),true);
-});
-test('Az online parser eltávolítja a wikijelölést és elutasítja a hiányos választ',()=>{
- const raw="{{cím2|Cím}}\n'''Hozzávalók:'''\n* 50 dkg [[Gomba|gomba]]\n* 1 fej hagyma\n| valign=top |\n'''Elkészítés:'''\n:A hozzávalókat keverd össze és főzd meg fedő alatt, amíg teljesen megpuhulnak. Melegen tálald.\n|}";
- const text=extractOnlineText(raw);assert(text.includes('50 dkg gomba'));assert(!text.includes('valign'));assert(!text.includes("'''"));
- assert.throws(()=>extractOnlineText('Átirányítás'));assert.throws(()=>extractOnlineText('Hozzávalók: liszt'));
-});
-test('A gyorsítótár és a forráshivatkozás csak ellenőrzött formátumot fogad el',()=>{
- const cache={page:'Szakácskönyv/Recept',text:'A'.repeat(101),revid:123,fetched:new Date().toISOString()};
- assert(validCachedSource(cache,cache.page));assert(!validCachedSource({...cache,revid:'javascript:alert(1)'},cache.page));assert(!validCachedSource(cache,'Másik recept'));
- assert(wikiURL('Szakácskönyv/Recept').startsWith('https://hu.wikibooks.org/wiki/'));
-});
-
-test('A cukkinihez tartozik recept, és az olívaolaj csak egyirányúan helyettesít',()=>{
- assert(findIngredients('cukkini').some(i=>i.id==='cukkini'));
- const r=recipes.find(r=>r.id==='cukkinis-teszta');assert(r);
- const m=matchRecipe(r,new Set(['cukkini','olivaolaj']));
- assert.equal(m.have,2);assert(!m.missing.includes('olaj'));
- assert.equal(matchRecipe({ingredients:[{id:'olivaolaj'}]},new Set(['olaj'])).have,0);
-});
+import {ingredients,emptyState,loadState,saveState,STORAGE_KEY,addCustom,buildList,buildPrompt,searchIngredients} from '../core.js';
+const memory=()=>{const data=new Map();return {getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value)};};
+test('A régi alapanyagok megmaradnak az új oldalon',()=>{const storage=memory();storage.setItem('cooking:v1',JSON.stringify({pantry:['cukkini','tojas','unknown'],favorites:['old']}));const {state}=loadState(storage);assert.deepEqual(state.selected,['cukkini','tojas']);});
+test('Saját alapanyag, mennyiség és megjegyzés mentés után helyreáll',()=>{const storage=memory(),state=emptyState();const custom=addCustom(state,'Vörös pesto');state.quantities[custom.id]='fél üveg';state.notes='2 főre';assert(saveState(storage,state));assert.deepEqual(loadState(storage).state,state);assert(buildPrompt(state).includes('Vörös pesto: fél üveg'));});
+test('Az egyedi nevek nem duplázódnak, a meglévő alapanyagot választjuk ki',()=>{const state=emptyState();addCustom(state,' Cukkini ');addCustom(state,'CUKKINI');assert.equal(state.custom.length,0);assert.deepEqual(state.selected,['cukkini']);addCustom(state,'vörös pesto');addCustom(state,'voros   pesto');assert.equal(state.custom.length,1);assert.equal(state.selected.length,2);});
+test('A másolt szöveg pontosan a bejelölt tételeket és mennyiségeket tartalmazza',()=>{const state={...emptyState(),selected:['tojas','cukkini'],quantities:{tojas:'3 db'},notes:'Sütő nélkül'};const list=buildList(state);assert.equal(list,'- Cukkini\n- Tojás: 3 db');assert(!list.includes('Sütő'));assert(buildPrompt(state).includes('További kéréseim: Sütő nélkül'));assert(buildPrompt(state).includes('Keress az interneten'));assert.equal(buildPrompt(emptyState()),'');});
+test('Sérült vagy letiltott tárhely mellett elindul az oldal',()=>{assert.equal(loadState(null).available,false);const storage=memory();storage.setItem(STORAGE_KEY,'{invalid');assert.equal(loadState(storage).corrupt,true);storage.setItem(STORAGE_KEY,'null');assert.deepEqual(loadState(storage).state,emptyState());assert.equal(saveState({setItem(){throw Error('quota');}},emptyState()),false);});
+test('Ismeretlen azonosítókat és hibás mezőket nem töltünk be',()=>{const storage=memory();storage.setItem(STORAGE_KEY,JSON.stringify({selected:['cukkini','bad','cukkini'],custom:[null,{label:'a'.repeat(100)}],quantities:{cukkini:'x'.repeat(100),bad:'1'},notes:'x'.repeat(1500)}));const {state}=loadState(storage);assert.deepEqual(state.selected,['cukkini']);assert.equal(state.quantities.cukkini.length,60);assert.equal(state.notes.length,1000);assert(!state.quantities.bad);});
+test('A keresés ékezet nélkül és a gyakori elnevezésekkel is működik',()=>{assert(searchIngredients(ingredients,'krumpli').some(i=>i.id==='krumpli'));assert(searchIngredients(ingredients,'cukkini').some(i=>i.id==='cukkini'));assert(searchIngredients(ingredients,'tejfol').some(i=>i.id==='tejfol'));assert(searchIngredients(ingredients,'','Gyümölcsök').every(i=>i.group==='Gyümölcsök'));});
